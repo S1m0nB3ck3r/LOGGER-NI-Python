@@ -1,0 +1,49 @@
+# 🚀 Commandes pour créer votre repository GitHub
+
+## Étape par étape
+
+# 1. Créer d'abord le repository sur GitHub (interface web)
+# Aller sur: https://github.com/new
+# Nom: Logger-NI
+# Description: Application d'acquisition de données National Instruments avec interface Tkinter
+# Public ou Private: votre choix
+# NE PAS cocher "Initialize with README" (vous en avez déjà un)
+# Cliquer sur "Create repository"
+
+# 2. Ouvrir PowerShell dans le dossier du projet
+cd "C:\TRAVAIL\RepositoriesGithub\Logger NI"
+
+# 3. Vérifier si Git est déjà initialisé
+git status
+
+# Si "fatal: not a git repository", initialiser Git:
+git init
+
+# 4. Configurer votre identité (si première fois)
+git config user.name "Votre Nom"
+git config user.email "votre.email@example.com"
+
+# 5. Ajouter tous les fichiers
+git add .
+
+# 6. Vérifier ce qui va être commité
+git status
+
+# 7. Faire le premier commit
+git commit -m "Initial commit: Logger NI v2.3 - Application d'acquisition DAQmx avec timestamps précis"
+
+# 8. Connecter au repository GitHub
+# REMPLACER "VOTRE-USERNAME" par votre vrai nom d'utilisateur GitHub
+git remote add origin https://github.com/VOTRE-USERNAME/Logger-NI.git
+
+# 9. Renommer la branche en main
+git branch -M main
+
+# 10. Pousser vers GitHub
+git push -u origin main
+
+# Quand demandé:
+# Username: votre-username-github
+# Password: votre-personal-access-token (PAS votre mot de passe!)
+
+# ✅ C'est fait! Allez sur https://github.com/VOTRE-USERNAME/Logger-NI
