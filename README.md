@@ -15,7 +15,7 @@ Application de logging pour cartes National Instruments développée en Python a
 ## 🏗️ Architecture
 
 ```
-Logger NI Lent/
+Logger NI/
 ├── model/              # Logique métier et acquisition
 │   ├── __init__.py
 │   ├── daq_model.py    # Gestion DAQmx
@@ -30,8 +30,8 @@ Logger NI Lent/
 │   ├── __init__.py
 │   └── config.py       # Configuration
 ├── data/               # Dossier de sauvegarde (créé automatiquement)
-├── venv/               # Environnement virtuel
-├── main.py             # Point d'entrée
+├── .venv/              # Environnement virtuel
+├── main_logger.py      # Point d'entrée
 └── requirements.txt    # Dépendances
 ```
 
@@ -40,14 +40,14 @@ Logger NI Lent/
 ### 1. Cloner le projet ou naviguer dans le dossier
 
 ```bash
-cd "c:\TRAVAIL\RepositoriesGithub\Logger NI Lent"
+cd "C:\TRAVAIL\RepositoriesGithub\Logger NI"
 ```
 
 ### 2. Activer l'environnement virtuel
 
 **Windows PowerShell:**
 ```powershell
-.\venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.antml:ps1
 ```
 
 **Windows CMD:**

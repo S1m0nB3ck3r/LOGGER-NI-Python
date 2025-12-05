@@ -55,42 +55,7 @@ class DAQModel:
         
         # Informations sur les canaux
         self.channel_names = []
-        self.n_channels = len(config.CHANNELS)
-        
-    def initialize_task(self):
-        """
-        Initialise la tâche DAQmx avec les canaux configurés
-        """
-        try:
-            # Créer une nouvelle tâche
-            self.task = nidaqmx.Task()
-            
-            # Ajouter les canaux analogiques
-            self.channel_names = []
-            for channel in self.config.CHANNELS:
-                ai_channel = self.task.ai_channels.add_ai_voltage_chan(
-                    channel,
-                    terminal_config=TerminalConfiguration.RSE,
-                    min_val=self.config.MIN_VOLTAGE,
-                    max_val=self.config.MAX_VOLTAGE
-                )
-                # Récupérer le nom du canal
-                self.channel_names.append(ai_channel.name)
-            
-            self.n_channels = len(self.channel_names)
-            print(f"✓ {self.n_channels} canal(aux) configuré(s): {', '.join(self.channel_names)}")
-            
-            # Configurer le timing
-            self.task.timing.cfg_samp_clk_timing(
-                rate=self.config.SAMPLE_RATE,
-                sample_mode=AcquisitionType.CONTINUOUS,
-                samps_per_chan=self.config.SAMPLES_PER_CHANNEL
-            )
-            return True
-            
-        except Exception as e:
-            print(f"Erreur lors de l'initialisation DAQ: {e}")
-            return False
+        self.n_channels = 0
     
     def initialize_task_from_nimax(self, task_name):
         """

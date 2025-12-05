@@ -10,18 +10,6 @@ class Config:
     
     # ========== PARAMÈTRES DAQ ==========
     
-    # Nom du périphérique DAQ (exemple: "Dev1")
-    # Modifiez selon votre configuration
-    # Périphériques détectés : Dev3, TS1, TS1Mod1, TS1Mod2, TS1Mod3, TS1Mod4
-    DEVICE_NAME = "Dev3"
-    
-    # Canaux analogiques à acquérir (format: "Dev1/ai0", "Dev1/ai1", etc.)
-    # Modifiez selon vos besoins
-    CHANNELS = [
-        f"{DEVICE_NAME}/ai0",
-        f"{DEVICE_NAME}/ai1"
-    ]
-    
     # Fréquence d'échantillonnage (Hz)
     SAMPLE_RATE = 10  # 10 Hz pour la cuve expérimentale
     

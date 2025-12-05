@@ -371,7 +371,7 @@ class MainView:
         
         tk.Label(
             info_frame,
-            text=self.config.DEVICE_NAME,
+            text="Configuré via NI MAX",
             font=("Segoe UI", 10),
             bg=self.colors['bg_dark'],
             fg=self.colors['text_white']
@@ -931,7 +931,7 @@ class MainView:
             ("🐍 Langage", "Python 3.10"),
             ("🖼️ Interface", "Tkinter + Matplotlib"),
             ("⚙️ API", "National Instruments DAQmx"),
-            ("📡 Périphérique", self.config.DEVICE_NAME),
+            ("📡 Configuration", "Tâches NI MAX"),
             ("🔊 Fréquence", f"{self.config.SAMPLE_RATE} Hz")
         ]
         
