@@ -117,6 +117,9 @@ class MainController:
             if success:
                 self.acquisition_active = True
                 
+                # Désactiver les contrôles de configuration pendant l'acquisition
+                self.view.set_config_controls_state(enabled=False)
+                
                 # Configurer les graphiques avec les canaux détectés
                 channel_names = self.daq_model.get_channel_names()
                 if channel_names:
@@ -158,6 +161,10 @@ class MainController:
         if self.acquisition_active:
             self.daq_model.stop_acquisition()
             self.acquisition_active = False
+            
+            # Réactiver les contrôles de configuration
+            self.view.set_config_controls_state(enabled=True)
+            
             print("Acquisition arrêtée")
         
         # Afficher les informations
@@ -262,6 +269,13 @@ class MainController:
             # Mettre à jour le graphique instantané
             if instant_data is not None and len(instant_data) > 0:
                 self.view.update_instantane_plot(instant_data, instant_timestamps)
+            
+            # Mettre à jour le nombre de points disponibles dans le buffer
+            if self.acquisition_active:
+                buffer_available = self.daq_model.get_buffer_available_samples()
+                self.view.buffer_available.set(f"{buffer_available} points")
+            else:
+                self.view.buffer_available.set("0 points")
             
             # Si enregistrement actif
             if self.recording_active:

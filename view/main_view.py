@@ -52,6 +52,9 @@ class MainView:
         self.file_comment = tk.StringVar(value="")
         self.available_tasks = []  # Liste des tâches DAQmx disponibles
         
+        # Variable pour le nombre de points disponibles dans le buffer
+        self.buffer_available = tk.StringVar(value="0")
+        
         # Variables pour l'échelle des graphiques
         self.auto_scale = tk.BooleanVar(value=True)
         self.y_min = tk.DoubleVar(value=-10.0)
@@ -460,6 +463,27 @@ class MainView:
             fg=self.colors['text_gray']
         )
         self.status_label.pack(anchor=tk.W)
+        
+        # Indicateur de buffer disponible
+        buffer_info_frame = tk.Frame(bottom_bar, bg=self.colors['bg_light'])
+        buffer_info_frame.pack(side=tk.LEFT, padx=20, pady=15)
+        
+        tk.Label(
+            buffer_info_frame,
+            text="📊 Buffer disponible",
+            font=("Segoe UI", 9, "bold"),
+            bg=self.colors['bg_light'],
+            fg=self.colors['accent_blue']
+        ).pack(anchor=tk.W)
+        
+        self.buffer_label = tk.Label(
+            buffer_info_frame,
+            textvariable=self.buffer_available,
+            font=("Segoe UI", 10, "bold"),
+            bg=self.colors['bg_light'],
+            fg=self.colors['accent_yellow']
+        )
+        self.buffer_label.pack(anchor=tk.W)
         
         # Contrôles d'échelle à droite
         scale_frame = tk.Frame(bottom_bar, bg=self.colors['bg_light'])
@@ -969,6 +993,26 @@ class MainView:
             cursor="hand2",
             relief=tk.FLAT
         ).pack(pady=20)
+    
+    def set_config_controls_state(self, enabled):
+        """
+        Active ou désactive les contrôles de configuration
+        La période d'enregistrement reste toujours activée
+        
+        Args:
+            enabled: True pour activer, False pour désactiver
+        """
+        state = tk.NORMAL if enabled else tk.DISABLED
+        
+        # Désactiver/activer les contrôles de configuration
+        self.task_combo.config(state='readonly' if enabled else 'disabled')
+        self.prefix_entry.config(state=state)
+        self.directory_entry.config(state=state)
+        self.browse_button.config(state=state)
+        self.comment_entry.config(state=state)
+        
+        # La période d'enregistrement reste toujours activée
+        # self.period_spinbox.config(state=tk.NORMAL)  # Toujours activé
     
     def run(self):
         """Lance la boucle principale de l'interface"""

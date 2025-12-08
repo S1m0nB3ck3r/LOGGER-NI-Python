@@ -56,6 +56,9 @@ class DAQModel:
         # Informations sur les canaux
         self.channel_names = []
         self.n_channels = 0
+        
+        # Nombre de points disponibles dans le buffer
+        self.buffer_available_samples = 0
     
     def initialize_task_from_nimax(self, task_name):
         """
@@ -148,6 +151,7 @@ class DAQModel:
         Arrête l'acquisition de données
         """
         self.is_running = False
+        self.buffer_available_samples = 0  # Réinitialiser le compteur de buffer
         
         if self.acquisition_thread:
             self.acquisition_thread.join(timeout=2.0)
@@ -240,6 +244,12 @@ class DAQModel:
             
             while self.is_running:
                 try:
+                    # Lire le nombre de points disponibles dans le buffer AVANT la lecture
+                    try:
+                        self.buffer_available_samples = self.task.in_stream.avail_samp_per_chan
+                    except:
+                        self.buffer_available_samples = 0
+                    
                     # Lire les données
                     data = self.task.read(
                         number_of_samples_per_channel=self.config.SAMPLES_PER_READ,
@@ -363,6 +373,18 @@ class DAQModel:
         Retourne le nombre de canaux
         """
         return self.n_channels
+    
+    def get_buffer_available_samples(self):
+        """
+        Retourne le nombre d'échantillons disponibles dans le buffer d'acquisition
+        (points non encore lus)
+        
+        Cette valeur est mise à jour dans la boucle d'acquisition pour plus d'efficacité.
+        
+        Returns:
+            int: Nombre d'échantillons disponibles dans le buffer
+        """
+        return self.buffer_available_samples
     
     def set_record_period(self, period):
         """
