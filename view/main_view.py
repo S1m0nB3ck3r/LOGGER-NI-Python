@@ -55,6 +55,9 @@ class MainView:
         # Variable pour le nombre de points disponibles dans le buffer
         self.buffer_available = tk.StringVar(value="0")
         
+        # Variable pour le temps écoulé depuis le début de l'acquisition
+        self.elapsed_time = tk.StringVar(value="00:00:00")
+        
         # Variables pour l'échelle des graphiques
         self.auto_scale = tk.BooleanVar(value=True)
         self.y_min = tk.DoubleVar(value=-10.0)
@@ -484,6 +487,27 @@ class MainView:
             fg=self.colors['accent_yellow']
         )
         self.buffer_label.pack(anchor=tk.W)
+        
+        # Indicateur de temps écoulé
+        elapsed_time_frame = tk.Frame(bottom_bar, bg=self.colors['bg_light'])
+        elapsed_time_frame.pack(side=tk.LEFT, padx=20, pady=15)
+        
+        tk.Label(
+            elapsed_time_frame,
+            text="⏱️ Temps écoulé",
+            font=("Segoe UI", 9, "bold"),
+            bg=self.colors['bg_light'],
+            fg=self.colors['accent_purple']
+        ).pack(anchor=tk.W)
+        
+        self.elapsed_time_label = tk.Label(
+            elapsed_time_frame,
+            textvariable=self.elapsed_time,
+            font=("Segoe UI", 10, "bold"),
+            bg=self.colors['bg_light'],
+            fg=self.colors['accent_green']
+        )
+        self.elapsed_time_label.pack(anchor=tk.W)
         
         # Contrôles d'échelle à droite
         scale_frame = tk.Frame(bottom_bar, bg=self.colors['bg_light'])

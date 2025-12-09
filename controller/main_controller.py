@@ -274,8 +274,13 @@ class MainController:
             if self.acquisition_active:
                 buffer_available = self.daq_model.get_buffer_available_samples()
                 self.view.buffer_available.set(f"{buffer_available} points")
+                
+                # Mettre à jour le temps écoulé
+                elapsed_time = self.daq_model.get_elapsed_time()
+                self.view.elapsed_time.set(elapsed_time)
             else:
                 self.view.buffer_available.set("0 points")
+                self.view.elapsed_time.set("00:00:00")
             
             # Si enregistrement actif
             if self.recording_active:

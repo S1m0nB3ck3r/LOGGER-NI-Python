@@ -1,3 +1,0 @@
-# test_test_test
-Temps	Mesure Cuve
-2.0	-0.11091447276994604

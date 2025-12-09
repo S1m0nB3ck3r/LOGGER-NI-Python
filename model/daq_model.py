@@ -35,9 +35,10 @@ class DAQModel:
         self.buffer_instantane_timestamps = []
         self.max_instantane_samples = config.INSTANT_MAX_SAMPLES  # 600 points (1 minute à 10Hz)
         
-        # Données enregistrées avec timestamps
+        # Données enregistrées avec timestamps (graphique longue durée)
         self.recorded_data = []
         self.recorded_timestamps = []
+        self.max_longue_duree_samples = config.MAX_LONGUE_DUREE_SAMPLES  # 100 000 points max
         
         # Compteur de points pour le calcul précis du temps
         self.total_samples_acquired = 0  # Compteur total de points acquis depuis le début de l'enregistrement
@@ -52,6 +53,9 @@ class DAQModel:
         self.current_filepath = None
         self.recording_start_time = None  # Temps de début d'enregistrement
         self.last_save_time = None  # Dernier temps de sauvegarde
+        
+        # Temps de début d'acquisition (pour affichage temps écoulé)
+        self.acquisition_start_time = None
         
         # Informations sur les canaux
         self.channel_names = []
@@ -131,6 +135,15 @@ class DAQModel:
         
         self.data_callback = data_callback
         
+        # Vider les buffers pour repartir sur des données fraîches
+        self.buffer_instantane = []
+        self.buffer_instantane_timestamps = []
+        self.recorded_data = []
+        self.recorded_timestamps = []
+        self.total_samples_acquired = 0
+        self.acquisition_start_time = time.time()  # Enregistrer le temps de démarrage
+        print("✓ Buffers vidés - nouvelle acquisition")
+        
         # Si un nom de tâche est fourni, utiliser la tâche NI MAX
         if task_name:
             if not self.initialize_task_from_nimax(task_name):
@@ -152,6 +165,7 @@ class DAQModel:
         """
         self.is_running = False
         self.buffer_available_samples = 0  # Réinitialiser le compteur de buffer
+        self.acquisition_start_time = None  # Réinitialiser le temps de démarrage
         
         if self.acquisition_thread:
             self.acquisition_thread.join(timeout=2.0)
@@ -322,6 +336,12 @@ class DAQModel:
                                 )
                             self.recorded_timestamps.append(precise_time)
                             
+                            # Limiter à max_longue_duree_samples pour éviter saturation mémoire
+                            if self.recorded_data.shape[1] > self.max_longue_duree_samples:
+                                overflow = self.recorded_data.shape[1] - self.max_longue_duree_samples
+                                self.recorded_data = self.recorded_data[:, overflow:]
+                                self.recorded_timestamps = self.recorded_timestamps[overflow:]
+                            
                             # Mettre à jour le dernier nombre de points lors de la sauvegarde
                             self.last_save_sample_count = self.total_samples_acquired
                     
@@ -385,6 +405,23 @@ class DAQModel:
             int: Nombre d'échantillons disponibles dans le buffer
         """
         return self.buffer_available_samples
+    
+    def get_elapsed_time(self):
+        """
+        Retourne le temps écoulé depuis le début de l'acquisition au format "HH:MM:SS"
+        
+        Returns:
+            str: Temps écoulé formaté ou "00:00:00" si acquisition non démarrée
+        """
+        if self.acquisition_start_time is None:
+            return "00:00:00"
+        
+        elapsed_seconds = int(time.time() - self.acquisition_start_time)
+        hours = elapsed_seconds // 3600
+        minutes = (elapsed_seconds % 3600) // 60
+        seconds = elapsed_seconds % 60
+        
+        return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
     
     def set_record_period(self, period):
         """

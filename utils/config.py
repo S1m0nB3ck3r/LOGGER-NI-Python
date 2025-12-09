@@ -26,6 +26,9 @@ class Config:
     INSTANT_HISTORY_SECONDS = 60  # 1 minute
     INSTANT_MAX_SAMPLES = SAMPLE_RATE * INSTANT_HISTORY_SECONDS  # 600 points à 10Hz
     
+    # Historique du graphique longue durée (nombre de points maximum)
+    MAX_LONGUE_DUREE_SAMPLES = 1000  # 100 000 points max (évite la saturation mémoire)
+    
     # Plage de tension
     MIN_VOLTAGE = -10.0
     MAX_VOLTAGE = 10.0
